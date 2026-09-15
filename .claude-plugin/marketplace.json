@@ -1,0 +1,49 @@
+{
+  "name": "mrgenesis-skills",
+  "owner": {
+    "name": "mrgenesis",
+    "email": "mrgenesis@hotmail.com"
+  },
+  "metadata": {
+    "description": "Skills pessoais para Claude Code",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "implement-feature",
+      "description": "Implements a feature autonomously based on its spec and plan, committing one commit per phase and reporting results against the feature's acceptance criteria.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/implement-feature"
+      ]
+    },
+    {
+      "name": "prd-writer",
+      "description": "Generate complete PRDs (Product Requirements Documents) through iterative clarification, with a 9-section PRD format.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/prd-writer"
+      ]
+    },
+    {
+      "name": "spec-writer",
+      "description": "Generates technical implementation spec and plan for one or more features based on PRD, codebase analysis, and iterative clarification.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/spec-writer"
+      ]
+    },
+    {
+      "name": "analisar-codebase",
+      "description": "Analisa a estrutura sintática real do código (funções, classes, métodos, interfaces, imports, chamadas) usando Tree-sitter, para mapear com precisão onde um símbolo é definido e todos os lugares onde ele é usado antes de editar código de produção.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/analisar-codebase"
+      ]
+    }
+  ]
+}
