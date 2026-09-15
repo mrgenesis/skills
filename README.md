@@ -42,6 +42,22 @@ Cada skill vive em sua própria pasta dentro de `skills/`, com um `SKILL.md` obr
 3. Adicione uma entrada correspondente em `.claude-plugin/marketplace.json`, dentro de `plugins`.
 4. Quando a skill estiver pronta, remova as duas linhas do passo 2 (os valores padrão, `false` e `true`, já liberam a skill para uso normal).
 
+## Atualizando uma skill já instalada
+
+Marketplaces de terceiros (como este) vêm com auto-update **desligado por padrão** (só marketplaces oficiais da Anthropic atualizam sozinhos em background). Depois de dar push numa mudança aqui, quem já instalou a skill precisa atualizar manualmente:
+
+```
+/plugin marketplace update mrgenesis-skills
+/plugin update analisar-codebase@mrgenesis-skills
+/reload-plugins
+```
+
+- `/plugin marketplace update` busca a versão mais recente do `marketplace.json` (pega plugins novos/removidos).
+- `/plugin update` busca o código mais recente daquele plugin específico.
+- `/reload-plugins` aplica as mudanças na sessão sem precisar reiniciar (use `/reload-plugins --force` se ele avisar que invalidaria o cache de prompt).
+
+Para não precisar rodar isso manualmente toda vez, dá pra ligar o auto-update em `/plugin` → aba **Marketplaces** → selecionar `mrgenesis-skills` → **Enable auto-update**.
+
 ## Validando antes do push
 
 ```
