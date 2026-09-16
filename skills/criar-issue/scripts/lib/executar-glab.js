@@ -1,12 +1,15 @@
 const { spawnSync } = require("node:child_process");
-const { obterVariavel } = require("./config-vars");
+const { obterToken, obterVariavel, URL_VAR_NAME } = require("./config-vars");
 
-const TOKEN_VAR_NAME = "MRG_GLAB_TOKEN";
-const URL_VAR_NAME = "MRG_GLAB_URL_BASE";
+function extrairRepoDosArgs(args) {
+  const indice = args.indexOf("--repo");
+  return indice !== -1 && args[indice + 1] ? args[indice + 1] : null;
+}
 
 /**
  * Monta o ambiente para o processo filho, repassando:
- * - MRG_GLAB_TOKEN (variável de ambiente ou ~/.mrg.skills.vars.json) como
+ * - o token resolvido para o --repo presente em args (MRG_GLAB_TOKEN, string
+ *   única ou mapa por grupo/projeto, ver lib/config-vars.js) como
  *   GITLAB_TOKEN, nome que o `glab` reconhece nativamente para autenticar
  *   sem precisar de `glab auth login`;
  * - MRG_GLAB_URL_BASE como GITLAB_HOST, para apontar para a instância
@@ -14,9 +17,9 @@ const URL_VAR_NAME = "MRG_GLAB_URL_BASE";
  * Se nenhuma das duas estiver configurada, o `glab` cai na autenticação já
  * gravada em disco por um `glab auth login` anterior, se existir.
  */
-function montarAmbiente() {
+function montarAmbiente(args) {
   const env = { ...process.env };
-  const token = obterVariavel(TOKEN_VAR_NAME);
+  const token = obterToken(extrairRepoDosArgs(args));
   const urlBase = obterVariavel(URL_VAR_NAME);
 
   if (token && !env.GITLAB_TOKEN) {
@@ -33,7 +36,7 @@ function montarAmbiente() {
  */
 function executarGlab(args) {
   const resultado = spawnSync("glab", args, {
-    env: montarAmbiente(),
+    env: montarAmbiente(args),
     encoding: "utf8",
   });
 

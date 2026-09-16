@@ -4,11 +4,17 @@ Ficam em `scripts/`. Todos são chamados com `node scripts/<arquivo>.js [opçõe
 
 ## scripts/detectar-glab.js
 
-Uso: `node scripts/detectar-glab.js` (sem argumentos).
+Uso: `node scripts/detectar-glab.js [--repo owner/projeto]`.
+
+`--repo` é opcional, mas passe sempre que já souber o repositório de destino (a essa altura do fluxo, geralmente já sabe, ver "Como agir" no `SKILL.md`): `MRG_GLAB_TOKEN` pode ser um token único ou um mapa por grupo/projeto, e sem `--repo` o script só consegue dizer se existe algum token configurado, não necessariamente um válido para aquele repositório.
 
 Verifica o sistema operacional, se o `glab` está instalado e se já existe uma forma de autenticação disponível. Duas vias contam como autenticado:
 
-1. **Arquivo `~/.mrg.skills.vars.json`** (via preferida): um JSON simples com as chaves `MRG_GLAB_TOKEN` e, se a instância não for o gitlab.com público, `MRG_GLAB_URL_BASE`. É lido do zero a cada execução por `lib/config-vars.js`, então uma edição no arquivo já vale na chamada seguinte, sem precisar reiniciar o Claude Code. Também aceita as mesmas chaves como variável de ambiente (útil pra CI), verificada antes do arquivo.
+1. **Arquivo `~/.mrg.skills.vars.json`** (via preferida): um JSON com a chave `MRG_GLAB_TOKEN` e, se a instância não for o gitlab.com público, `MRG_GLAB_URL_BASE`. É lido do zero a cada execução por `lib/config-vars.js`, então uma edição no arquivo já vale na chamada seguinte, sem precisar reiniciar o Claude Code. Também aceita as mesmas chaves como variável de ambiente (útil pra CI), verificada antes do arquivo.
+
+   `MRG_GLAB_TOKEN` aceita dois formatos:
+   - **string**: um único token, usado para qualquer repositório.
+   - **objeto**: `{ "grupo/subgrupo": "token1", "outro-grupo/projeto": "token2" }`, para quem usa Project/Group access tokens (escopados a um grupo ou projeto específico). Ao resolver o token para um `--repo`, o script escolhe a chave mais específica que corresponde ao caminho (ex.: `--repo grupo/subgrupo/projeto-x` casa com a chave `grupo/subgrupo`, e uma chave de projeto exato tem prioridade sobre uma de grupo).
 2. **Sessão já gravada em disco** via `glab auth login` (checada com `glab auth status`), para quem já autenticou manualmente antes.
 
 A razão de preferir o arquivo em vez de `glab auth login` direto: o login sempre exige responder a prompts (protocolo Git, colar o token), e cada execução destes scripts roda num processo novo, isolado do terminal do usuário, sem como responder a esses prompts por ele. Rode `detectar-glab.js` antes de publicar ou editar qualquer issue, e de novo depois de qualquer ação corretiva, para confirmar que a pendência foi resolvida.

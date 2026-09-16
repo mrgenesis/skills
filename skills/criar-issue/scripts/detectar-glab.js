@@ -1,11 +1,19 @@
 #!/usr/bin/env node
 /**
+ * Uso: node detectar-glab.js [--repo owner/projeto]
+ *
  * Detecta o sistema operacional, verifica se o utilitário oficial `glab`
  * (GitLab CLI) já está instalado e se já existe uma forma de autenticação
  * disponível: o token configurado em ~/.mrg.skills.vars.json (preferido,
  * porque não exige nenhuma interação nem reiniciar o Claude Code depois de
  * configurado) ou uma sessão já gravada em disco via `glab auth login`
  * (checada com `glab auth status`).
+ *
+ * --repo é opcional aqui, mas recomendado sempre que já se souber o
+ * repositório de destino: MRG_GLAB_TOKEN pode ser um mapa por grupo/projeto
+ * (ver lib/config-vars.js), e sem --repo o script só consegue checar se
+ * existe ALGUM token configurado, não necessariamente um válido para aquele
+ * repositório específico.
  *
  * Por que ~/.mrg.skills.vars.json é a via preferida: `glab auth login`
  * sempre exige pelo menos duas interações (protocolo Git e colar o token), e
@@ -41,15 +49,24 @@
  */
 
 const { execSync } = require("node:child_process");
+const { parseArgs } = require("node:util");
 const os = require("node:os");
 const fs = require("node:fs");
-const { obterVariavel, garantirArquivoTemplate, CONFIG_PATH } = require("./lib/config-vars");
+const {
+  obterToken,
+  garantirArquivoTemplate,
+  CONFIG_PATH,
+  TOKEN_VAR_NAME,
+  URL_VAR_NAME,
+} = require("./lib/config-vars");
 
-const TOKEN_VAR_NAME = "MRG_GLAB_TOKEN";
-const URL_VAR_NAME = "MRG_GLAB_URL_BASE";
+function lerOpcoes() {
+  const { values } = parseArgs({ options: { repo: { type: "string" } } });
+  return values;
+}
 
-function tokenConfigurado() {
-  return Boolean(obterVariavel(TOKEN_VAR_NAME));
+function tokenConfigurado(repo) {
+  return Boolean(obterToken(repo));
 }
 
 function jaInstalado() {
@@ -63,8 +80,8 @@ function jaInstalado() {
   }
 }
 
-function estaAutenticado() {
-  if (tokenConfigurado()) return true;
+function estaAutenticado(repo) {
+  if (tokenConfigurado(repo)) return true;
   try {
     execSync("glab auth status", { stdio: "ignore" });
     return true;
@@ -96,6 +113,8 @@ function mensagemAutenticacao(arquivoRecemCriado) {
     `Restrinja a permissão do arquivo, já que ele guarda um segredo: chmod 600 ${CONFIG_PATH}`,
     ``,
     `Esse arquivo é lido do zero a cada execução, então não precisa reiniciar o Claude Code depois de editá-lo. Nunca cole o token aqui na conversa.`,
+    ``,
+    `Se você usa tokens diferentes por grupo ou projeto (comum com Project/Group access tokens, que são escopados), troque o valor de "${TOKEN_VAR_NAME}" por um objeto em vez de uma string única, ex.: { "grupo/subgrupo": "token1", "outro-grupo/projeto": "token2" }. Ao publicar ou editar uma issue em "grupo/subgrupo/projeto-x", o script usa o token da chave mais específica que corresponder ao caminho.`,
     ``,
     `Alternativa: se preferir não usar esse arquivo, rode \`glab auth login\` (com \`--hostname <url>\` se for instância própria) direto no seu terminal. Ele grava a autenticação em ~/.config/glab-cli/config.yml e funciona a partir da próxima execução, mas exige responder aos prompts interativos na hora.`,
   ].join("\n");
@@ -179,10 +198,11 @@ function detectarSistema() {
 }
 
 function main() {
+  const { repo } = lerOpcoes();
   const versao = jaInstalado();
   const instalado = Boolean(versao);
   const { sysName, command, executable } = detectarSistema();
-  const autenticado = instalado ? estaAutenticado() : false;
+  const autenticado = instalado ? estaAutenticado(repo) : false;
 
   const pendencias = [];
   if (!instalado) pendencias.push("instalarGlab");
@@ -193,7 +213,7 @@ function main() {
     ...(instalado ? { version: versao } : {}),
     sysName,
     authenticated: autenticado,
-    tokenConfigured: tokenConfigurado(),
+    tokenConfigured: tokenConfigurado(repo),
     tokenVarName: TOKEN_VAR_NAME,
     urlVarName: URL_VAR_NAME,
     pendencias,

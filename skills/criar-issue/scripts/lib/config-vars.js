@@ -4,10 +4,13 @@ const path = require("node:path");
 
 const CONFIG_PATH = path.join(os.homedir(), ".mrg.skills.vars.json");
 
+const TOKEN_VAR_NAME = "MRG_GLAB_TOKEN";
+const URL_VAR_NAME = "MRG_GLAB_URL_BASE";
+
 const CAMPOS_TEMPLATE = {
-  MRG_GLAB_TOKEN:
-    "<preencha: token de acesso pessoal gerado em <URL da sua instância GitLab>/-/user_settings/personal_access_tokens, com escopo 'api'>",
-  MRG_GLAB_URL_BASE:
+  [TOKEN_VAR_NAME]:
+    "<preencha: token de acesso pessoal gerado em <URL da sua instância GitLab>/-/user_settings/personal_access_tokens, com escopo 'api'. Se usar tokens diferentes por grupo/projeto, troque este valor por um objeto, ex.: { \"grupo/subgrupo\": \"token1\", \"outro-grupo/projeto\": \"token2\" }>",
+  [URL_VAR_NAME]:
     "<opcional, preencha só se usar uma instância própria do GitLab (não gitlab.com), ex.: gitlab.suaempresa.com.br>",
 };
 
@@ -17,6 +20,10 @@ const CAMPOS_TEMPLATE = {
  */
 function ehPlaceholder(valor) {
   return typeof valor === "string" && /^<.*>$/.test(valor.trim());
+}
+
+function valorValido(valor) {
+  return typeof valor === "string" && valor.trim() && !ehPlaceholder(valor);
 }
 
 /**
@@ -42,20 +49,67 @@ function lerArquivoConfig() {
 }
 
 /**
- * Resolve o valor de uma variável, priorizando a variável de ambiente (para
- * quem preferir configurar assim, ex. CI) e caindo para o arquivo de
- * configuração em seguida. Um placeholder ainda não preenchido conta como
- * "não configurado".
+ * Resolve o valor de uma variável simples (não aninhada), priorizando a
+ * variável de ambiente (para quem preferir configurar assim, ex. CI) e
+ * caindo para o arquivo de configuração em seguida. Um placeholder ainda não
+ * preenchido conta como "não configurado". Não serve para MRG_GLAB_TOKEN
+ * quando ele estiver no formato aninhado por grupo/projeto, use obterToken
+ * para isso.
  */
 function obterVariavel(nome) {
-  if (process.env[nome] && process.env[nome].trim() && !ehPlaceholder(process.env[nome])) {
-    return process.env[nome].trim();
-  }
+  if (valorValido(process.env[nome])) return process.env[nome].trim();
   const config = lerArquivoConfig();
-  const valor = config[nome];
-  if (typeof valor === "string" && valor.trim() && !ehPlaceholder(valor)) {
-    return valor.trim();
+  return valorValido(config[nome]) ? config[nome].trim() : null;
+}
+
+/**
+ * Entre as chaves do mapa de tokens, encontra a mais específica cujo
+ * caminho é igual a repoPath ou é um prefixo de diretório dele (ex.: a
+ * chave "grupo/subgrupo" bate com o repo "grupo/subgrupo/projeto", mas não
+ * com "grupo/subgrupo-outro/projeto"). Em caso de mais de uma bater, vence a
+ * mais longa (mais específica).
+ */
+function encontrarChaveMaisEspecifica(mapa, repoPath) {
+  let melhor = null;
+  for (const chaveBruta of Object.keys(mapa)) {
+    const chave = chaveBruta.replace(/\/+$/, "");
+    const bate = repoPath === chave || repoPath.startsWith(`${chave}/`);
+    if (bate && (!melhor || chave.length > melhor.length)) {
+      melhor = chave;
+    }
   }
+  return melhor;
+}
+
+/**
+ * Resolve o token para um repositório específico. MRG_GLAB_TOKEN aceita dois
+ * formatos:
+ * - string: um único token, usado para qualquer repositório;
+ * - objeto: { "caminho/do/grupo-ou-projeto": "token" }, escolhendo a entrada
+ *   cujo caminho mais especificamente corresponde a repoPath (ex.: um token
+ *   de projeto sobrepõe um token de grupo mais genérico).
+ * Sem repoPath (ainda não se sabe o repositório de destino), retorna o
+ * primeiro valor válido encontrado, só para sinalizar "existe algo
+ * configurado" nas checagens que rodam antes de perguntar o repositório.
+ */
+function obterToken(repoPath) {
+  const bruto = valorValido(process.env[TOKEN_VAR_NAME])
+    ? process.env[TOKEN_VAR_NAME].trim()
+    : lerArquivoConfig()[TOKEN_VAR_NAME];
+
+  if (typeof bruto === "string") {
+    return valorValido(bruto) ? bruto.trim() : null;
+  }
+
+  if (bruto && typeof bruto === "object") {
+    if (repoPath) {
+      const chave = encontrarChaveMaisEspecifica(bruto, repoPath);
+      return chave && valorValido(bruto[chave]) ? bruto[chave].trim() : null;
+    }
+    const algumValido = Object.values(bruto).find(valorValido);
+    return algumValido ? algumValido.trim() : null;
+  }
+
   return null;
 }
 
@@ -76,4 +130,11 @@ function garantirArquivoTemplate() {
   return true;
 }
 
-module.exports = { obterVariavel, garantirArquivoTemplate, CONFIG_PATH };
+module.exports = {
+  obterVariavel,
+  obterToken,
+  garantirArquivoTemplate,
+  CONFIG_PATH,
+  TOKEN_VAR_NAME,
+  URL_VAR_NAME,
+};
