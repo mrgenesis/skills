@@ -72,4 +72,4 @@ Funcionalidade: Login do Usuário
 
 ## Critérios de aceite x Definition of Done (DoD)
 
-Critérios de aceite definem o que uma história de usuário específica precisa cumprir para estar completa. A DoD estabelece um padrão de qualidade mais amplo, aplicado a todo incremento de trabalho (ex.: código revisado, testado, documentado), independentemente da história. Ver também [dod-vs-dor.md](___Projetos/skills/skills/criar-issue/dod-vs-dor.md) para a diferença entre DoD e DoR.
+Critérios de aceite definem o que uma história de usuário específica precisa cumprir para estar completa. A DoD estabelece um padrão de qualidade mais amplo, aplicado a todo incremento de trabalho (ex.: código revisado, testado, documentado), independentemente da história. Ver também [dod-vs-dor.md](dod-vs-dor.md) para a diferença entre DoD e DoR.

@@ -44,6 +44,15 @@
       "skills": [
         "./skills/analisar-codebase"
       ]
+    },
+    {
+      "name": "criar-issue",
+      "description": "Converte relatos informais em issues estruturadas e prontas para desenvolvimento (ready), com user story, requisitos funcionais, regras de negócio e critérios de aceite em Given/When/Then.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/criar-issue"
+      ]
     }
   ]
 }
