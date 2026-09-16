@@ -37,9 +37,22 @@ Se algum item do checklist não estiver atendido, não gere a issue ainda, faça
 
 Depois que o checklist estiver completo, gere a issue final em markdown pronto para copiar, seguindo exatamente a estrutura de [assets/template-issue.md](assets/template-issue.md). Preencha cada seção do template e remova os comentários de instrução (`<!-- ... -->`) do resultado final, eles existem só para orientar o preenchimento.
 
+## Entrega da issue
+
+Com a issue final gerada, pergunte ao usuário onde ela deve ficar, oferecendo estas opções:
+
+- **Arquivo local**: salve o markdown da issue em um arquivo (peça o caminho, ou sugira um nome baseado no título, ex.: `issues/<slug-do-titulo>.md`).
+- **Publicar no GitLab**: pergunte também qual é o projeto de destino (ex.: `GOV/arquitetura`), o `--repo` é sempre obrigatório e nunca deve ser assumido a partir do diretório atual, ele não tem relação com o projeto GitLab de destino da issue. Depois, siga o processo descrito em [references/scripts-gitlab.md](references/scripts-gitlab.md), rodando `scripts/detectar-glab.js` primeiro para resolver instalação e autenticação do `glab` antes de publicar com `scripts/publicar-issue.js`. O título da issue (`## [titulo]`, primeira linha do template) vai no `--title`; o restante do markdown (a partir de "## Contexto") vai no arquivo passado em `--description-file`, sem repetir o título dentro do corpo.
+- **As duas coisas**: salve o arquivo local (com o markdown completo, título incluso) e publique no GitLab do jeito descrito acima.
+
+Nunca publique no GitLab sem essa confirmação explícita do usuário, mesmo que ele não tenha pedido para salvar em arquivo.
+
+Se o usuário pedir para editar uma issue já publicada, use `scripts/editar-issue.js`, também documentado em [references/scripts-gitlab.md](references/scripts-gitlab.md). Confirme o repositório de destino da mesma forma, o `--repo` é obrigatório aqui também.
+
 ## Referências
 
-Consulte conforme a necessidade, não é preciso ler os dois de antemão:
+Consulte conforme a necessidade, não é preciso ler todas de antemão:
 
 - [references/dod-vs-dor.md](references/dod-vs-dor.md): diferença entre Definition of Done (DoD) e Definition of Ready (DoR). Consulte quando precisar explicar ao usuário por que a issue precisa estar "ready" antes de ir para desenvolvimento.
 - [references/criterios-de-aceite.md](references/criterios-de-aceite.md): o que são bons critérios de aceite, como escrevê-los em Given/When/Then, exemplos práticos e erros comuns. Consulte ao elaborar os critérios de aceite, especialmente em casos mais complexos ou quando o usuário tiver dúvidas sobre o conceito.
+- [references/scripts-gitlab.md](references/scripts-gitlab.md): formato de saída de `scripts/detectar-glab.js`, `scripts/publicar-issue.js` e `scripts/editar-issue.js`, e como agir a partir de cada campo. Consulte antes de publicar ou editar uma issue no GitLab.
