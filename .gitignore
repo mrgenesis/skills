@@ -1,0 +1,5 @@
+# Binário do glab baixado por skills/gitlab-toolkit/scripts/instalar-glab.js.
+# É baixado sob demanda (ver scripts/lib/glab-binario.js), nunca deve ser
+# commitado: cada plataforma (Linux/macOS/Windows) tem seu próprio binário de
+# ~50MB, e cada usuário só precisa do binário da própria plataforma.
+skills/gitlab-toolkit/vendor/glab/

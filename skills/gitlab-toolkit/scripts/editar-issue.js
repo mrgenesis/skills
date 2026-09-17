@@ -119,7 +119,7 @@ function main() {
     opcoes.milestone;
 
   if (temCampoParaAtualizar) {
-    const resultado = executarGlab(montarArgsUpdate(opcoes, descricao));
+    const resultado = executarGlab(montarArgsUpdate(opcoes, descricao), opcoes.repo);
     passos.push({ etapa: "update", ...resultado });
     if (!resultado.ok) {
       console.log(
@@ -133,7 +133,7 @@ function main() {
   if (opcoes.close) {
     const args = ["issue", "close", opcoes.id];
     if (opcoes.repo) args.push("--repo", opcoes.repo);
-    const resultado = executarGlab(args);
+    const resultado = executarGlab(args, opcoes.repo);
     passos.push({ etapa: "close", ...resultado });
     if (!resultado.ok) {
       console.log(
@@ -147,7 +147,7 @@ function main() {
   if (opcoes.reopen) {
     const args = ["issue", "reopen", opcoes.id];
     if (opcoes.repo) args.push("--repo", opcoes.repo);
-    const resultado = executarGlab(args);
+    const resultado = executarGlab(args, opcoes.repo);
     passos.push({ etapa: "reopen", ...resultado });
     if (!resultado.ok) {
       console.log(

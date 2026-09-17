@@ -91,7 +91,7 @@ function main() {
   if (opcoes.milestone) args.push("--milestone", opcoes.milestone);
   if (opcoes.confidential) args.push("--confidential");
 
-  const resultado = executarGlab(args);
+  const resultado = executarGlab(args, opcoes.repo);
 
   if (!resultado.ok) {
     console.log(JSON.stringify({ ok: false, action: "create", error: resultado.error }));

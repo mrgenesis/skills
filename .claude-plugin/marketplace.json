@@ -55,6 +55,15 @@
       ]
     },
     {
+      "name": "gitlab-toolkit",
+      "description": "Executa operações no GitLab via glab (GitLab CLI): publicar e editar issues, e baixar um arquivo específico ou uma pasta inteira de um repositório sem precisar clonar.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/gitlab-toolkit"
+      ]
+    },
+    {
       "name": "criador-prd",
       "description": "Gera um PRD (Product Requirements Document) de feature claro, completo e acionável, a partir de material já existente e/ou entrevista, opcionalmente também em JSON e com Tracker de rastreabilidade.",
       "source": "./",

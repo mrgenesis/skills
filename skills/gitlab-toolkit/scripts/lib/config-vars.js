@@ -2,16 +2,17 @@ const fs = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
 
-const CONFIG_PATH = path.join(os.homedir(), ".mrg.skills.vars.json");
+const CONFIG_DIR = path.join(os.homedir(), ".mrg.skills");
+const CONFIG_PATH = path.join(CONFIG_DIR, "credenciais.json");
 
 const TOKEN_VAR_NAME = "MRG_GLAB_TOKEN";
 const URL_VAR_NAME = "MRG_GLAB_URL_BASE";
+const URL_BASE_PADRAO = "https://gitlab.ms.sebrae.com.br/";
 
 const CAMPOS_TEMPLATE = {
   [TOKEN_VAR_NAME]:
     "<preencha: token de acesso pessoal gerado em <URL da sua instância GitLab>/-/user_settings/personal_access_tokens, com escopo 'api'. Se usar tokens diferentes por grupo/projeto, troque este valor por um objeto, ex.: { \"grupo/subgrupo\": \"token1\", \"outro-grupo/projeto\": \"token2\" }>",
-  [URL_VAR_NAME]:
-    "<opcional, preencha só se usar uma instância própria do GitLab (não gitlab.com), ex.: gitlab.suaempresa.com.br>",
+  [URL_VAR_NAME]: URL_BASE_PADRAO,
 };
 
 /**
@@ -27,8 +28,8 @@ function valorValido(valor) {
 }
 
 /**
- * Lê ~/.mrg.skills.vars.json, um arquivo de configuração compartilhado entre
- * as skills desta família (mrgenesis-skills). Ele é lido do zero a cada
+ * Lê ~/.mrg.skills/credenciais.json, um arquivo de configuração compartilhado
+ * entre as skills desta família (mrgenesis-skills). Ele é lido do zero a cada
  * execução, então uma edição no arquivo já vale na próxima chamada do
  * script, sem precisar reiniciar o Claude Code (diferente de variável de
  * ambiente, que só é herdada por processos novos a partir do momento em que
@@ -52,14 +53,18 @@ function lerArquivoConfig() {
  * Resolve o valor de uma variável simples (não aninhada), priorizando a
  * variável de ambiente (para quem preferir configurar assim, ex. CI) e
  * caindo para o arquivo de configuração em seguida. Um placeholder ainda não
- * preenchido conta como "não configurado". Não serve para MRG_GLAB_TOKEN
+ * preenchido conta como "não configurado". Para MRG_GLAB_URL_BASE, se nem
+ * env var nem arquivo tiverem um valor válido, cai para URL_BASE_PADRAO
+ * (nunca retorna null para essa variável). Não serve para MRG_GLAB_TOKEN
  * quando ele estiver no formato aninhado por grupo/projeto, use obterToken
  * para isso.
  */
 function obterVariavel(nome) {
   if (valorValido(process.env[nome])) return process.env[nome].trim();
   const config = lerArquivoConfig();
-  return valorValido(config[nome]) ? config[nome].trim() : null;
+  if (valorValido(config[nome])) return config[nome].trim();
+  if (nome === URL_VAR_NAME) return URL_BASE_PADRAO;
+  return null;
 }
 
 /**
@@ -114,8 +119,9 @@ function obterToken(repoPath) {
 }
 
 /**
- * Cria ~/.mrg.skills.vars.json com um template (todas as chaves conhecidas,
- * cada uma com a instrução de preenchimento no lugar do valor) caso o
+ * Cria ~/.mrg.skills/credenciais.json com um template (todas as chaves
+ * conhecidas; MRG_GLAB_URL_BASE já preenchida com URL_BASE_PADRAO,
+ * MRG_GLAB_TOKEN com a instrução de preenchimento no lugar do valor) caso o
  * arquivo ainda não exista. Nunca sobrescreve um arquivo já existente, para
  * não apagar valores que o usuário já tenha preenchido. Retorna true se
  * acabou de criar o arquivo agora, false se ele já existia.
@@ -123,6 +129,7 @@ function obterToken(repoPath) {
 function garantirArquivoTemplate() {
   if (fs.existsSync(CONFIG_PATH)) return false;
 
+  fs.mkdirSync(CONFIG_DIR, { recursive: true, mode: 0o700 });
   fs.writeFileSync(CONFIG_PATH, JSON.stringify(CAMPOS_TEMPLATE, null, 2) + "\n", {
     mode: 0o600,
   });
@@ -134,7 +141,9 @@ module.exports = {
   obterVariavel,
   obterToken,
   garantirArquivoTemplate,
+  CONFIG_DIR,
   CONFIG_PATH,
   TOKEN_VAR_NAME,
   URL_VAR_NAME,
+  URL_BASE_PADRAO,
 };

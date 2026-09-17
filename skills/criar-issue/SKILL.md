@@ -42,12 +42,18 @@ Depois que o checklist estiver completo, gere a issue final em markdown pronto p
 Com a issue final gerada, pergunte ao usuário onde ela deve ficar, oferecendo estas opções:
 
 - **Arquivo local**: salve o markdown da issue em um arquivo (peça o caminho, ou sugira um nome baseado no título, ex.: `issues/<slug-do-titulo>.md`).
-- **Publicar no GitLab**: pergunte também qual é o projeto de destino (ex.: `GOV/arquitetura`), o `--repo` é sempre obrigatório e nunca deve ser assumido a partir do diretório atual, ele não tem relação com o projeto GitLab de destino da issue. Depois, siga o processo descrito em [references/scripts-gitlab.md](references/scripts-gitlab.md), rodando `scripts/detectar-glab.js --repo <projeto>` primeiro (já com o repositório escolhido, porque o token pode ser diferente por grupo/projeto) para resolver instalação e autenticação do `glab` antes de publicar com `scripts/publicar-issue.js`. O título da issue (`## [titulo]`, primeira linha do template) vai no `--title`; o restante do markdown (a partir de "## Contexto") vai no arquivo passado em `--description-file`, sem repetir o título dentro do corpo.
+- **Publicar no GitLab**: pergunte também qual é o repositório de destino (ex.: `gov/arquitetura`), sempre obrigatório e nunca deve ser assumido a partir do diretório atual, ele não tem relação com o repositório GitLab de destino da issue. A publicação em si é responsabilidade da skill `gitlab-toolkit`, não desta skill, siga "Delegar para gitlab-toolkit" abaixo. O título da issue (`## [titulo]`, primeira linha do template) é o título a publicar; o restante do markdown (a partir de "## Contexto") é o corpo/descrição, sem repetir o título dentro dele.
 - **As duas coisas**: salve o arquivo local (com o markdown completo, título incluso) e publique no GitLab do jeito descrito acima.
 
 Nunca publique no GitLab sem essa confirmação explícita do usuário, mesmo que ele não tenha pedido para salvar em arquivo.
 
-Se o usuário pedir para editar uma issue já publicada, use `scripts/editar-issue.js`, também documentado em [references/scripts-gitlab.md](references/scripts-gitlab.md). Confirme o repositório de destino da mesma forma, o `--repo` é obrigatório aqui também.
+Se o usuário pedir para editar uma issue já publicada, confirme o repositório de destino da mesma forma (obrigatório aqui também) e também o IID da issue (o número que aparece na URL, ex.: `#42`), e siga o mesmo processo de delegação abaixo, pedindo à `gitlab-toolkit` para editar a issue em vez de publicar uma nova.
+
+### Delegar para gitlab-toolkit
+
+1. Confira se a skill `gitlab-toolkit` está disponível na lista de skills do contexto atual.
+2. Se **não** estiver: avise o usuário que vai instalar a skill agora, e rode via Bash: `claude plugin marketplace update mrgenesis-skills` seguido de `claude plugin install gitlab-toolkit@mrgenesis-skills`. Esses comandos usam a CLI do Claude Code fora da sessão interativa, então não substituem `/reload-plugins`: se depois de instalar a skill ainda não aparecer disponível, peça ao usuário para rodar `/reload-plugins` na conversa (é um comando interativo, não é possível dispará-lo a partir daqui).
+3. Invoque a skill `gitlab-toolkit` (ferramenta Skill) pedindo para publicar (ou editar) a issue no repositório informado, passando título e corpo/descrição conforme o item acima.
 
 ## Referências
 
@@ -55,4 +61,3 @@ Consulte conforme a necessidade, não é preciso ler todas de antemão:
 
 - [references/dod-vs-dor.md](references/dod-vs-dor.md): diferença entre Definition of Done (DoD) e Definition of Ready (DoR). Consulte quando precisar explicar ao usuário por que a issue precisa estar "ready" antes de ir para desenvolvimento.
 - [references/criterios-de-aceite.md](references/criterios-de-aceite.md): o que são bons critérios de aceite, como escrevê-los em Given/When/Then, exemplos práticos e erros comuns. Consulte ao elaborar os critérios de aceite, especialmente em casos mais complexos ou quando o usuário tiver dúvidas sobre o conceito.
-- [references/scripts-gitlab.md](references/scripts-gitlab.md): formato de saída de `scripts/detectar-glab.js`, `scripts/publicar-issue.js` e `scripts/editar-issue.js`, e como agir a partir de cada campo. Consulte antes de publicar ou editar uma issue no GitLab.
