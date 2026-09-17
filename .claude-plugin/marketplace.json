@@ -53,6 +53,42 @@
       "skills": [
         "./skills/criar-issue"
       ]
+    },
+    {
+      "name": "criador-prd",
+      "description": "Gera um PRD (Product Requirements Document) de feature claro, completo e acionável, a partir de material já existente e/ou entrevista, opcionalmente também em JSON e com Tracker de rastreabilidade.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/criador-prd"
+      ]
+    },
+    {
+      "name": "criador-rfc",
+      "description": "Gera RFCs (Request for Comments) de propostas técnicas ainda em revisão, distinguindo do que é papel de um PRD, ADR ou FDD, com Tracker de rastreabilidade opcional.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/criador-rfc"
+      ]
+    },
+    {
+      "name": "criador-adr",
+      "description": "Gera ADRs (Architecture Decision Records) claros e rastreáveis por decisão arquitetural fechada, um arquivo por decisão em docs/adrs/, com numeração sequencial e Tracker opcional.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/criador-adr"
+      ]
+    },
+    {
+      "name": "criador-fdd",
+      "description": "Gera um FDD (Feature Design Doc) técnico detalhando como implementar uma feature já decidida (via PRD, RFC e/ou ADRs), com contratos, fluxos e matriz de erros, opcionalmente também em JSON e com Tracker.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/criador-fdd"
+      ]
     }
   ]
 }
