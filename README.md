@@ -9,10 +9,17 @@ Repositório de Agent Skills para uso com o Claude Code, publicado como um marke
 ├── .claude-plugin/
 │   └── marketplace.json     # índice do marketplace (nome, dono, plugins)
 ├── skills/
+│   ├── analisar-codebase/
+│   ├── criador-adr/
+│   ├── criador-fdd/
+│   ├── criador-notas/
+│   ├── criador-prd/
+│   ├── criador-rfc/
+│   ├── criar-issue/
+│   ├── gitlab-toolkit/
 │   ├── implement-feature/
 │   ├── prd-writer/
-│   ├── spec-writer/
-│   └── analisar-codebase/
+│   └── spec-writer/
 └── template/
     └── SKILL.md             # ponto de partida para uma skill nova
 ```
@@ -23,10 +30,17 @@ Cada skill vive em sua própria pasta dentro de `skills/`, com um `SKILL.md` obr
 
 ```
 /plugin marketplace add mrgenesis/skills
+/plugin install analisar-codebase@mrgenesis-skills
+/plugin install criador-adr@mrgenesis-skills
+/plugin install criador-fdd@mrgenesis-skills
+/plugin install criador-notas@mrgenesis-skills
+/plugin install criador-prd@mrgenesis-skills
+/plugin install criador-rfc@mrgenesis-skills
+/plugin install criar-issue@mrgenesis-skills
+/plugin install gitlab-toolkit@mrgenesis-skills
 /plugin install implement-feature@mrgenesis-skills
 /plugin install prd-writer@mrgenesis-skills
 /plugin install spec-writer@mrgenesis-skills
-/plugin install analisar-codebase@mrgenesis-skills
 ```
 
 ## Criando uma skill nova

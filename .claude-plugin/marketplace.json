@@ -98,6 +98,15 @@
       "skills": [
         "./skills/criador-fdd"
       ]
+    },
+    {
+      "name": "criador-notas",
+      "description": "Transforma texto bruto (transcrições, artigos, atas, anotações de aula) em uma anotação destilada em Markdown seguindo o método CODE e a Sumarização Progressiva de Tiago Forte.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/criador-notas"
+      ]
     }
   ]
 }
