@@ -3,3 +3,7 @@
 # commitado: cada plataforma (Linux/macOS/Windows) tem seu próprio binário de
 # ~50MB, e cada usuário só precisa do binário da própria plataforma.
 skills/gitlab-toolkit/vendor/glab/
+
+# Saída dos testes (transcrições, grading.json etc) gerados ao validar
+# skills com o skill-creator. É artefato de teste, não parte da skill.
+skills/*-workspace/

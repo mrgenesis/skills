@@ -107,6 +107,15 @@
       "skills": [
         "./skills/criador-notas"
       ]
+    },
+    {
+      "name": "suporte-n3",
+      "description": "Copiloto de suporte de nível 3 para investigar a causa raiz de chamados em produção cruzando código-fonte e schema do banco, guiando o analista passo a passo, e gerando conhecimento reaproveitável para o suporte N1, N2 e N3.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/suporte-n3"
+      ]
     }
   ]
 }

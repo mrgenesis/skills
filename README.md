@@ -19,7 +19,8 @@ Repositório de Agent Skills para uso com o Claude Code, publicado como um marke
 │   ├── gitlab-toolkit/
 │   ├── implement-feature/
 │   ├── prd-writer/
-│   └── spec-writer/
+│   ├── spec-writer/
+│   └── suporte-n3/
 └── template/
     └── SKILL.md             # ponto de partida para uma skill nova
 ```
@@ -41,6 +42,7 @@ Cada skill vive em sua própria pasta dentro de `skills/`, com um `SKILL.md` obr
 /plugin install implement-feature@mrgenesis-skills
 /plugin install prd-writer@mrgenesis-skills
 /plugin install spec-writer@mrgenesis-skills
+/plugin install suporte-n3@mrgenesis-skills
 ```
 
 ## Criando uma skill nova
