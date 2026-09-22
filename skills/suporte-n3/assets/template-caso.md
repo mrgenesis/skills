@@ -4,6 +4,7 @@ slug: "[slug-curto-do-problema]"
 titulo: "[Título curto e descritivo do problema]"
 data_resolucao: "[YYYY-MM-DD]"
 sistemas: ["[nome-do-repositorio-ou-container-envolvido]"]
+tag: ["respostas-chamado", "[nome-do-sistema, igual à entrada DNS da URL do sistema]"]
 sintomas:
   - "[sintoma ou mensagem de erro exata, do jeito que o usuário ou o suporte N1/N2 descreveria]"
 tags: ["[palavra-chave-para-busca]"]

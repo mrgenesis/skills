@@ -46,6 +46,7 @@ Quando a causa raiz confirmada na Fase 3 for um bug de código (uma mudança que
 Peça ao analista, se ainda não tiver:
 - O identificador do chamado (`id_chamado`).
 - O relato do problema como o usuário final descreveu (sintoma, tela, mensagem de erro).
+- O nome do sistema, que deve ser exatamente igual à entrada DNS da URL que o usuário acessa (ex.: se o sistema fica em `https://checkout.empresa.com.br`, o nome é `checkout.empresa.com.br`, não um apelido como "checkout" ou o nome do repositório). Se já souber pelo contexto da conversa, ou já apareceu em algum registro da base de conhecimento deste mesmo projeto (Fase 2), não precisa perguntar de novo, só confirme rapidamente que continua o mesmo.
 
 Registre esse relato tal como o analista descreveu, sem reescrever para um jargão técnico ainda: ele vira o texto de "sintomas" do registro final (Fase 5) e, se a causa raiz acabar sendo um bug de código, também é o ponto de partida do relato de negócio da issue para o time de desenvolvimento (ver "Dependência: skill criar-issue" acima).
 
@@ -107,7 +108,7 @@ Com a causa raiz confirmada (e a correção aplicada, se havia uma a aplicar), g
 
 Depois que o analista aprovar os dois textos:
 1. Gere o slug (minúsculo, sem acento, palavras separadas por hífen, poucas palavras) a partir do título do problema.
-2. Preencha `assets/template-caso.md` com os dados do caso e salve em `<projeto>/base-conhecimento/<id_chamado>-<slug>.md`.
+2. Preencha `assets/template-caso.md` com os dados do caso e salve em `<projeto>/base-conhecimento/<id_chamado>-<slug>.md`. O campo `tag` sempre leva exatamente dois valores: `respostas-chamado` (fixo, marca o arquivo como esse tipo de registro) e o nome do sistema coletado na Fase 1 (a entrada DNS da URL, não um apelido).
 3. Mostre a "Nota de resolução" separadamente no chat, pronta para o analista copiar para o sistema de chamados (ela não fica isolada em nenhum outro arquivo, só dentro do registro da base de conhecimento como referência de tom).
 
 ## Scripts disponíveis
