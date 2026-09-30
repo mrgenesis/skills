@@ -102,7 +102,7 @@ function estaAutenticado(repo) {
 }
 
 function mensagemInstalacao() {
-  return `O glab (utilitário oficial do GitLab) não foi encontrado nem no seu sistema nem no cache desta skill. Deseja que eu baixe o binário oficial (sem instalar nada no sistema: sem sudo/admin, sem gerenciador de pacotes) e salve em ${GLAB_BIN_PATH}? Isso vai te proporcionar publicar/editar issues e baixar arquivos ou pastas de repositórios no GitLab.`;
+  return `O glab (utilitário oficial do GitLab) não foi encontrado nem no seu sistema nem no cache desta skill. Deseja que eu baixe o binário oficial (sem instalar nada no sistema: sem sudo/admin, sem gerenciador de pacotes) e salve em ${GLAB_BIN_PATH}? Isso vai te proporcionar publicar, editar/fechar/reabrir, consultar issues e baixar arquivos ou pastas de repositórios no GitLab.`;
 }
 
 function mensagemAutenticacao(arquivoRecemCriado) {
@@ -118,14 +118,14 @@ function mensagemAutenticacao(arquivoRecemCriado) {
       ];
 
   return [
-    `Para publicar, editar ou baixar arquivos de repositórios no GitLab, o glab precisa estar autenticado. A forma recomendada aqui é usar o arquivo ${CONFIG_PATH}, porque \`glab auth login\` sempre pede alguma interação (protocolo Git, colar o token) e cada execução deste processo é isolada do seu terminal, sem como responder a esses prompts.`,
+    `Para publicar, editar, consultar ou baixar issues/arquivos de repositórios no GitLab, o glab precisa estar autenticado. A forma recomendada aqui é usar o arquivo ${CONFIG_PATH}, porque \`glab auth login\` sempre pede alguma interação (protocolo Git, colar o token) e cada execução deste processo é isolada do seu terminal, sem como responder a esses prompts.`,
     ``,
     ...passoArquivo,
     `Restrinja a permissão do arquivo, já que ele guarda um segredo: chmod 600 ${CONFIG_PATH}`,
     ``,
     `Esse arquivo é lido do zero a cada execução, então não precisa reiniciar o Claude Code depois de editá-lo. Nunca cole o token aqui na conversa.`,
     ``,
-    `Se você usa tokens diferentes por grupo ou projeto (comum com Project/Group access tokens, que são escopados), troque o valor de "${TOKEN_VAR_NAME}" por um objeto em vez de uma string única, ex.: { "grupo/subgrupo": "token1", "outro-grupo/projeto": "token2" }. Ao publicar, editar ou baixar um arquivo em "grupo/subgrupo/projeto-x", o script usa o token da chave mais específica que corresponder ao caminho.`,
+    `Se você usa tokens diferentes por grupo ou projeto (comum com Project/Group access tokens, que são escopados), troque o valor de "${TOKEN_VAR_NAME}" por um objeto em vez de uma string única, ex.: { "grupo/subgrupo": "token1", "outro-grupo/projeto": "token2" }. Ao operar em "grupo/subgrupo/projeto-x", o script usa o token da chave mais específica que corresponder ao caminho.`,
     ``,
     `Alternativa: se preferir não usar esse arquivo, rode \`glab auth login\` (com \`--hostname <url>\` se for instância própria) direto no seu terminal. Ele grava a autenticação em ~/.config/glab-cli/config.yml e funciona a partir da próxima execução, mas exige responder aos prompts interativos na hora.`,
   ].join("\n");

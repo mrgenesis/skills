@@ -56,7 +56,7 @@
     },
     {
       "name": "gitlab-toolkit",
-      "description": "Executa operações no GitLab via glab (GitLab CLI): publicar e editar issues, e baixar um arquivo específico ou uma pasta inteira de um repositório sem precisar clonar.",
+      "description": "Executa operações no GitLab via glab (GitLab CLI): publicar, editar/fechar/reabrir e consultar issues (dados e comentários), e baixar um arquivo específico ou uma pasta inteira de um repositório sem precisar clonar.",
       "source": "./",
       "strict": false,
       "skills": [
