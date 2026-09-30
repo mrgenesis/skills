@@ -1,0 +1,21 @@
+# Processo: nota tipo 20 (informação formal com o cliente)
+
+A nota tipo 20, "Atualização e coleta de informação", é o canal formal para dar e receber informação no chamado. Serve para qualquer troca formal com quem abriu o chamado, por exemplo:
+
+- **Coletar informação**: algo que nem o código, nem o banco, nem o analista conseguem responder (horário exato do erro, qual registro/documento/CPF estava em uso, print da mensagem, se acontece com outro usuário ou navegador, qual caminho de telas foi seguido).
+- **Dar informação**: comunicar formalmente um andamento ou algo que o cliente precisa saber ou fazer.
+- **Pedir autorização**: quando a correção mexe em dados ou em algo que afeta o cliente e ele precisa aprovar antes (uma aprovação também é informação formal). Isso complementa a [cautela de produção](cautela-producao.md): a confirmação do analista continua obrigatória, a do cliente é adicional quando o impacto é dele.
+- **Informar uma pendência de terceiros**: por exemplo, avisar que o caso foi encaminhado à equipe de desenvolvimento e que o atendimento aguarda o retorno dela.
+
+Abrir uma nota tipo 20 é decisão do N3. Você pode sugerir quando achar útil, mas quem decide se o atendimento fica pendente, e aguardando o quê, é o analista. Se ele quiser aguardar (por exemplo, o retorno do time de desenvolvimento), siga a decisão dele sem contestar.
+
+Toda nota tipo 20 encerra a sessão com o atendimento **pendente**. O que se está aguardando depende da nota: a resposta ou a autorização do cliente, o retorno de outra equipe, ou outra coisa que o analista indicar. Não presuma que é o cliente. O atendimento só volta pelo processo de [retomada](retomada.md), e por isso a nota tipo 20 nunca acontece na mesma sessão que a [nota tipo 81](nota-81.md).
+
+## Passos
+
+1. **Alinhe com o analista.** Se a sugestão da nota partiu de você, explique o que quer comunicar, coletar ou pedir, por que isso é necessário e o que muda no atendimento conforme o retorno. Se a iniciativa partiu dele, entenda o que ele quer comunicar. Nos dois casos, confirme o que ficará pendente e de quem.
+2. **Procure outro caminho, se couber.** Se for coleta de informação sugerida por você, pergunte se o analista consegue obtê-la de outro jeito (log, auditoria, tela administrativa, contato direto que ele já tenha com o cliente). Se conseguir e preferir, isso vira o próximo passo normal da [investigação](investigacao.md). A decisão final é dele.
+3. **Redija o texto.** Linguagem simples, sem jargão técnico, cordial, dizendo em uma frase o motivo da nota. Perguntas ou pedidos de autorização numerados, objetivos e fáceis de responder. Peça tudo o que for necessário de uma vez, para não precisar de uma segunda rodada, mas não pergunte nada que não vá usar. Num pedido de autorização, descreva em termos do cliente o que será feito e o efeito para ele.
+4. **Oriente a criação.** O analista cria no chamado uma nota do tipo **"20 - Atualização e coleta de informação"**, com a flag **"privado" desabilitada**. Explique o porquê: com "privado" habilitado o cliente não é notificado nem enxerga a nota.
+5. **Salve o andamento.** Depois que o analista confirmar que criou a nota, salve em `<projeto>/base-conhecimento/<id_chamado>-<slug>.md`, usando `assets/template-caso.md` com `status: pendente` e `data_resolucao`, `causa_raiz` e `tipo_solucao` vazios. O slug segue a mesma regra do fechamento (minúsculo, sem acento, poucas palavras separadas por hífen, a partir do título) e o campo `tag` já leva os dois valores: `respostas-chamado` e o nome do sistema. A seção "Andamento da investigação" precisa estar completa: passos já executados com os resultados exatos, hipótese atual, o texto da nota tipo 20 com a data, o que ficou pendente e de quem, e o próximo passo ao retomar (para cada retorno possível, quando fizer diferença). Seja completo: quem retomar pode estar em outra conversa, sem nada do contexto atual, e vai depender só desse arquivo. As seções "Causa raiz", "Instrução técnica detalhada", "Chamados impactados" e "Nota de resolução" ficam só com o cabeçalho. Se o chamado já tinha um registro `pendente` (nova nota tipo 20 depois de uma retomada), atualize o mesmo arquivo, acrescentando ao andamento.
+6. **Encerre a sessão** dizendo ao analista como retomar: basta voltar com o número do chamado e o que houver de novo.
