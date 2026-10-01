@@ -9,7 +9,15 @@ O mesmo conteúdo é publicado em dois repositórios, cada um como um marketplac
 | Marketplace | Repositório | Branch local | Para adicionar |
 |---|---|---|---|
 | `mrgenesis-skills` | GitHub `mrgenesis/skills` (remote `origin`) | `main` | `/plugin marketplace add mrgenesis/skills` |
-| `sebrae-skills` | GitLab do Sebrae `gov/skills` (remote `sebrae`) | `sebrae` | `/plugin marketplace add ssh://git@gitlab.ms.sebrae.com.br:2224/gov/skills.git` |
+| `sebrae-skills` | GitLab do Sebrae `gov/skills` (remote `sebrae`) | `sebrae` | `/plugin marketplace add git@gitlab.ms.sebrae.com.br:gov/skills.git` |
+
+O Claude Code não aceita URL `ssh://` com porta, e o SSH do GitLab do Sebrae roda na porta 2224. Antes de adicionar o `sebrae-skills`, configure a porta no `~/.ssh/config` (é preciso ter a chave SSH cadastrada no GitLab do Sebrae):
+
+```
+Host gitlab.ms.sebrae.com.br
+    Port 2224
+    User git
+```
 
 A única diferença entre os dois é o `name` em `.claude-plugin/marketplace.json`. Todo desenvolvimento acontece na `main`; a branch `sebrae` é a `main` mais um commit que troca esse nome. Para publicar:
 
