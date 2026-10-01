@@ -116,6 +116,15 @@
       "skills": [
         "./skills/suporte-n3"
       ]
+    },
+    {
+      "name": "validar-conformidade",
+      "description": "Base de conformidade para as entregas das outras skills: checklists por artefato (commit, MR, tarefas 20 e 81 do GLPI, solução, validação, issue, entrega) e conferência com versão corrigida, segundo o PROP 2.4.3.1, as regras de chamados no GLPI e o guia de Git da UTIC do Sebrae MS.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/validar-conformidade"
+      ]
     }
   ]
 }
