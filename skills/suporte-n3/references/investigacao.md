@@ -15,7 +15,7 @@ Se o analista confirmou que o chamado é o mesmo problema de um registro existen
 A investigação depende da `analisar-codebase` para qualquer rastreio de símbolo (função, classe, método) antes de basear um passo nisso: grep textual confunde comentário, string e função homônima em outro escopo com a definição real, e um passo baseado nisso pode mandar o analista olhar o lugar errado em produção.
 
 1. Confira se `analisar-codebase` está disponível na lista de skills do contexto atual.
-2. Se **não** estiver: avise o analista e rode via Bash `claude plugin marketplace update mrgenesis-skills` seguido de `claude plugin install analisar-codebase@mrgenesis-skills`. Isso não substitui `/reload-plugins`: se a skill ainda não aparecer, peça ao analista para rodar `/reload-plugins` na conversa (é um comando interativo, não é possível dispará-lo a partir daqui).
+2. Se **não** estiver: avise o analista, descubra de qual marketplace a `suporte-n3` foi instalada (rode `claude plugin list` e veja o sufixo `@<marketplace>`, por exemplo `mrgenesis-skills` ou `sebrae-skills`) e rode via Bash `claude plugin marketplace update <marketplace>` seguido de `claude plugin install analisar-codebase@<marketplace>`. Isso não substitui `/reload-plugins`: se a skill ainda não aparecer, peça ao analista para rodar `/reload-plugins` na conversa (é um comando interativo, não é possível dispará-lo a partir daqui).
 3. Sempre que precisar entender um arquivo desconhecido, ou localizar onde um símbolo é definido e usado, invoque a `analisar-codebase` (ferramenta Skill) em vez de grep manual.
 
 ## Um passo de cada vez

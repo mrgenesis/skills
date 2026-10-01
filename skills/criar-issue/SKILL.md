@@ -52,7 +52,7 @@ Se o usuário pedir para editar uma issue já publicada, confirme o repositório
 ### Delegar para gitlab-toolkit
 
 1. Confira se a skill `gitlab-toolkit` está disponível na lista de skills do contexto atual.
-2. Se **não** estiver: avise o usuário que vai instalar a skill agora, e rode via Bash: `claude plugin marketplace update mrgenesis-skills` seguido de `claude plugin install gitlab-toolkit@mrgenesis-skills`. Esses comandos usam a CLI do Claude Code fora da sessão interativa, então não substituem `/reload-plugins`: se depois de instalar a skill ainda não aparecer disponível, peça ao usuário para rodar `/reload-plugins` na conversa (é um comando interativo, não é possível dispará-lo a partir daqui).
+2. Se **não** estiver: avise o usuário que vai instalar a skill agora, e descubra de qual marketplace esta skill foi instalada (rode `claude plugin list` e veja o sufixo `@<marketplace>` de `criar-issue`, por exemplo `mrgenesis-skills` ou `sebrae-skills`) e rode via Bash: `claude plugin marketplace update <marketplace>` seguido de `claude plugin install gitlab-toolkit@<marketplace>`. Esses comandos usam a CLI do Claude Code fora da sessão interativa, então não substituem `/reload-plugins`: se depois de instalar a skill ainda não aparecer disponível, peça ao usuário para rodar `/reload-plugins` na conversa (é um comando interativo, não é possível dispará-lo a partir daqui).
 3. Invoque a skill `gitlab-toolkit` (ferramenta Skill) pedindo para publicar (ou editar) a issue no repositório informado, passando título e corpo/descrição conforme o item acima.
 
 ## Referências

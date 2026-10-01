@@ -2,6 +2,26 @@
 
 Repositório de Agent Skills para uso com o Claude Code, publicado como um marketplace de plugins.
 
+## Dois marketplaces
+
+O mesmo conteúdo é publicado em dois repositórios, cada um como um marketplace com nome próprio:
+
+| Marketplace | Repositório | Branch local | Para adicionar |
+|---|---|---|---|
+| `mrgenesis-skills` | GitHub `mrgenesis/skills` (remote `origin`) | `main` | `/plugin marketplace add mrgenesis/skills` |
+| `sebrae-skills` | GitLab do Sebrae `gov/skills` (remote `sebrae`) | `sebrae` | `/plugin marketplace add ssh://git@gitlab.ms.sebrae.com.br:2224/gov/skills.git` |
+
+A única diferença entre os dois é o `name` em `.claude-plugin/marketplace.json`. Todo desenvolvimento acontece na `main`; a branch `sebrae` é a `main` mais um commit que troca esse nome. Para publicar:
+
+```bash
+git push origin main                 # mrgenesis-skills
+git switch sebrae && git merge main  # traz as mudanças, mantendo o nome sebrae-skills
+git push sebrae sebrae:main          # sebrae-skills
+git switch main
+```
+
+Skills que instalam outras skills não usam o nome do marketplace fixo: descobrem por `claude plugin list` de qual marketplace vieram (sufixo `@<marketplace>`).
+
 ## Estrutura
 
 ```
@@ -29,6 +49,8 @@ Repositório de Agent Skills para uso com o Claude Code, publicado como um marke
 Cada skill vive em sua própria pasta dentro de `skills/`, com um `SKILL.md` obrigatório (frontmatter `name` + `description`) e, se precisar, arquivos de apoio (`scripts/`, `references/`, `vendor/` etc).
 
 ## Como instalar a partir daqui
+
+Adicione um dos marketplaces (tabela acima) e instale as skills com o nome dele no lugar de `mrgenesis-skills` quando usar o `sebrae-skills`:
 
 ```
 /plugin marketplace add mrgenesis/skills
@@ -62,7 +84,7 @@ Cada skill vive em sua própria pasta dentro de `skills/`, com um `SKILL.md` obr
 
 ## Atualizando uma skill já instalada
 
-Marketplaces de terceiros (como este) vêm com auto-update **desligado por padrão** (só marketplaces oficiais da Anthropic atualizam sozinhos em background). Depois de dar push numa mudança aqui, quem já instalou a skill precisa atualizar manualmente:
+Marketplaces de terceiros (como este) vêm com auto-update **desligado por padrão** (só marketplaces oficiais da Anthropic atualizam sozinhos em background). Depois de dar push numa mudança aqui, quem já instalou a skill precisa atualizar manualmente (troque `mrgenesis-skills` por `sebrae-skills` se for o caso):
 
 ```
 /plugin marketplace update mrgenesis-skills
@@ -74,7 +96,7 @@ Marketplaces de terceiros (como este) vêm com auto-update **desligado por padr�
 - `/plugin update` busca o código mais recente daquele plugin específico.
 - `/reload-plugins` aplica as mudanças na sessão sem precisar reiniciar (use `/reload-plugins --force` se ele avisar que invalidaria o cache de prompt).
 
-Para não precisar rodar isso manualmente toda vez, dá pra ligar o auto-update em `/plugin` → aba **Marketplaces** → selecionar `mrgenesis-skills` → **Enable auto-update**.
+Para não precisar rodar isso manualmente toda vez, dá pra ligar o auto-update em `/plugin` → aba **Marketplaces** → selecionar o marketplace → **Enable auto-update**.
 
 ## Validando antes do push
 
