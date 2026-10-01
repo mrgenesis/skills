@@ -1,7 +1,5 @@
 ---
 name: validar-conformidade
-disable-model-invocation: true
-user-invocable: false
 description: 'Base de conformidade para as entregas das outras skills: reúne as normas da UTIC do Sebrae MS (PROP 2.4.3.1, regras de chamados no GLPI e Guia de Desenvolvimento com Git) organizadas por tema (suporte no GLPI, repositório Git/GitLab, gestão de mudanças e backlog, entrega e aceite, papéis) e por artefato. Outra skill a chama antes de gerar um artefato, para receber o checklist do que ele precisa cumprir, e antes de entregá-lo, para conferir o rascunho e receber de volta a versão conforme. Cobre mensagem de commit, commit que conclui issue, branch, merge request, tarefas 20 e 81 do GLPI, solução do chamado, pedido de validação, escalonamento, classificação de chamado, issue/requisição de mudança e entrega para homologação. Use sempre que uma skill (suporte-n3, criar-issue, implement-feature, gitlab-toolkit, spec-writer ou qualquer outra) for produzir ou entregar um desses artefatos, mesmo que ninguém peça validação explicitamente. Use também quando o usuário pedir para validar, revisar ou conferir se algo está de acordo com o processo, o PROP, o guia de Git ou as regras do GLPI (ex.: "esse commit tá no padrão?", "essa nota pode ir pro cliente?", "isso é mudança padrão ou normal?"), ou para auditar se uma skill segue essas normas.'
 ---
 
