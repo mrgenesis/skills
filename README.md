@@ -2,6 +2,38 @@
 
 Repositório de Agent Skills para uso com o Claude Code, publicado como um marketplace de plugins.
 
+## Registrar o marketplace no Claude Code
+
+O repositório é público no GitHub, então o marketplace é registrado por HTTPS: não precisa de chave SSH nem de login, e a porta 443 costuma passar por redes corporativas. O atalho `mrgenesis/skills` também funciona, mas o Claude Code clona por SSH (`git@github.com:...`), o que exige uma chave SSH cadastrada no GitHub.
+
+Rode o bloco inteiro no terminal. Ele não altera nenhuma configuração: primeiro confere se o repositório está acessível (com as credenciais desativadas, para não abrir pedido de login) e só então registra o marketplace. Se não conseguir acessar, mostra um aviso e não tenta registrar.
+
+**Linux, WSL ou macOS (bash/zsh):**
+
+```bash
+if GIT_TERMINAL_PROMPT=0 git -c credential.helper= ls-remote https://github.com/mrgenesis/skills.git HEAD >/dev/null 2>&1; then
+  claude plugin marketplace add https://github.com/mrgenesis/skills.git
+else
+  echo "ATENÇÃO: não foi possível acessar https://github.com/mrgenesis/skills.git. Confira a conexão com a internet e o proxy da rede e rode este bloco de novo."
+fi
+```
+
+**Windows (PowerShell):**
+
+```powershell
+$env:GIT_TERMINAL_PROMPT = '0'
+git -c credential.helper= ls-remote https://github.com/mrgenesis/skills.git HEAD *> $null
+$acessivel = $LASTEXITCODE -eq 0
+Remove-Item Env:GIT_TERMINAL_PROMPT
+if ($acessivel) {
+  claude plugin marketplace add https://github.com/mrgenesis/skills.git
+} else {
+  Write-Warning "Não foi possível acessar https://github.com/mrgenesis/skills.git. Confira a conexão com a internet e o proxy da rede e rode este bloco de novo."
+}
+```
+
+Depois de registrado, instale as skills como em "Como instalar a partir daqui".
+
 ## Estrutura
 
 ```
@@ -31,7 +63,7 @@ Cada skill vive em sua própria pasta dentro de `skills/`, com um `SKILL.md` obr
 ## Como instalar a partir daqui
 
 ```
-/plugin marketplace add mrgenesis/skills
+/plugin marketplace add https://github.com/mrgenesis/skills.git
 /plugin install analisar-codebase@mrgenesis-skills
 /plugin install criador-adr@mrgenesis-skills
 /plugin install criador-fdd@mrgenesis-skills
